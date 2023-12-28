@@ -1,11 +1,13 @@
 import { Accordion } from "./Accordion";
 import { Banner } from "./Banner";
+import { HouseList } from "./HouseList";
 
 export const App = () => {
   return (
-    <main>
-      <Banner />
+    <>
+      <Banner> Providing houses all over the world</Banner>
+      <HouseList />
       <Accordion />
-    </main>
+    </>
   );
 };

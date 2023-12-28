@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import styles from "./Banner.module.css"; //this is an object
 import Image from "next/image";
 const subtitleStyle = {
@@ -6,7 +7,11 @@ const subtitleStyle = {
   color: "coral",
 };
 
-export const Banner = () => {
+interface BannerProps {
+  children: ReactNode;
+}
+
+export const Banner: React.FC<BannerProps> = ({ children }) => {
   return (
     <header className='row mb-4'>
       <div className='col-5'>
@@ -17,9 +22,7 @@ export const Banner = () => {
           height={150}
         />
       </div>
-      <div className='col-7 mt-5 fst-italic fs-3 fw-bold'>
-        Providing houses all over the world
-      </div>
+      <div className='col-7 mt-5 fst-italic fs-3 fw-bold'>{children}</div>
     </header>
   );
 };
