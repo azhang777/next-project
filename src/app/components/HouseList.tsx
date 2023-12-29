@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import { HouseRow } from "./HouseRow";
 
 export class House {
@@ -23,6 +24,22 @@ const houseArray: House[] = [
 ];
 
 export const HouseList = () => {
+  const [houses, setHouses] = useState(houseArray); //call hooks at the top level, called within the function component satisfies all rules of using hooks
+  const [counter, setCounter] = useState(houseArray.length);
+  
+  const addHouse = () => {
+    setHouses([
+      ...houses,
+      {
+        id: 3,
+        address: "32 Valley Way, New York",
+        country: "USA",
+        price: 1000000,
+      },
+    ]);
+    setCounter(counter + 1);
+  };
+
   return (
     <>
       <div className='row mb-2'>
@@ -37,7 +54,7 @@ export const HouseList = () => {
           </tr>
         </thead>
         <tbody>
-          {houseArray.map((house) => (
+          {houses.map((house) => (
             <HouseRow
               key={house.id}
               {...house} //use spread operator wisely
@@ -45,6 +62,13 @@ export const HouseList = () => {
           ))}
         </tbody>
       </table>
-    </>
+      <button
+          className='btn btn-primary'
+          onClick={addHouse}
+        >
+          Add
+        </button>
+        <div>{counter}</div> 
+    </> //hydration failed because the button was inside table, should not be in table, but below it
   );
 };
