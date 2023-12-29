@@ -1,32 +1,34 @@
 "use client"
-import React, { useState } from "react";
-import { HouseRow } from "./HouseRow";
-
-export class House {
-  id!: number;
-  address!: string;
-  country!: string;
-  price!: number;
+import React, { useEffect, useRef, useState } from "react";
+import { HouseRow, HouseRowMem } from "./HouseRow";
+interface House {
+  id: number;
+  address: string;
+  country: string;
+  price: number;
 }
-const houseArray: House[] = [
-  {
-    id: 1,
-    address: "12 Valley of Kings, Geneva",
-    country: "Switzerland",
-    price: 900000,
-  },
-  {
-    id: 2,
-    address: "89 Road of Forks, Bern",
-    country: "Switzerland",
-    price: 500000,
-  },
-];
 
 export const HouseList = () => {
-  const [houses, setHouses] = useState(houseArray); //call hooks at the top level, called within the function component satisfies all rules of using hooks
-  const [counter, setCounter] = useState(houseArray.length);
   
+  const [houses, setHouses] = useState<House[]>([]); //call hooks at the top level, called within the function component satisfies all rules of using hooks
+  const counter = useRef<number>(0);
+  
+  const refValue: number = counter.current;
+  useEffect(() => { //this is run after the jsx returned by this function is rendered
+    const fetchHouses = async () => {
+      try {
+        const response = await fetch("../houses.json")
+        const data: {houses: House[]} = await response.json();
+        setHouses(data.houses);
+        counter.current++; //bc  of empty dependency array, this will not change, remove dependency to see it illustrate infinite useEffect hook
+      }
+      catch(error) {
+        console.log('error fetching houses:', error)
+      }
+    };
+    fetchHouses();
+  }, []) //square brackets so this hook is called once during initially rendering of HouseList component, without it, everytime HouseList rerenders, this hook will be called and the house data will be set back to its initial state.
+
   const addHouse = () => {
     setHouses([
       ...houses,
@@ -37,7 +39,6 @@ export const HouseList = () => {
         price: 1000000,
       },
     ]);
-    setCounter(counter + 1);
   };
 
   return (
@@ -55,7 +56,7 @@ export const HouseList = () => {
         </thead>
         <tbody>
           {houses.map((house) => (
-            <HouseRow
+            <HouseRowMem
               key={house.id}
               {...house} //use spread operator wisely
             />
@@ -68,7 +69,7 @@ export const HouseList = () => {
         >
           Add
         </button>
-        <div>{counter}</div> 
+        <div>{refValue}</div> 
     </> //hydration failed because the button was inside table, should not be in table, but below it
   );
 };

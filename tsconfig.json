@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/components/Banner.tsx"
-  ],
+, "src/api/houses/[id].js"  ],
   "exclude": ["node_modules"]
 }

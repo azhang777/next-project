@@ -1,3 +1,4 @@
+import React from "react";
 import { currencyFormatter } from "../helpers//currency-formatter";
 import { House } from "./HouseList";
 
@@ -20,3 +21,5 @@ export const HouseRow: React.FC<HouseRowProps> = ({
     </tr>
   );
 };
+
+export const HouseRowMem = React.memo(HouseRow); //should only be used if it is faster than rerendering. Rerending is highly optimized because of reconciliation.
